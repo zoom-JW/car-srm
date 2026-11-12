@@ -1,10 +1,10 @@
 
 //  user info
 
-type UserRole = 'client' | 'worker' | 'admin';
+export type UserRole = 'client' | 'worker' | 'admin';
 
 
-interface BaseUser {
+export interface BaseUser {
     id: string;
     name: string;
     phone?: string;
@@ -84,6 +84,7 @@ export interface Car {
 }
 
 
+
 // status of repair 
 export type RepairStatus =
     | 'DIAGNOSTICS'
@@ -154,69 +155,99 @@ export interface AutoPart {
     specs: string;
     image: string;
 }
+import { mockWorkerUser } from "./mockUsersData"
 
 
-
-
-// static client
-export const mockClientUser: ClientUser = {
-    id: 'usr-client-01',
-    name: 'XXX XXXX',
-    phone: '+373 60 000 000',
-    email: 'client@automaster.com',
-    role: 'client',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-    discountRate: 5,
-    activeRepairId: 'ord-8841',
-    cars: [
+export const mockActiveRepair: ActiveRepairOrder = {
+    orderId: 'ord-8841',
+    carId: 'car-01',
+    carName: 'Tesla Model Y Dual Motor',
+    licensePlate: 'C AB 123',
+    serviceTitle: 'Комплексная диагностика EV + Замена тормозной жидкости',
+    status: 'IN_PROGRESS', // Меняй на 'PARKED' для теста парковки 5х5
+    progressPercent: 65,
+    assignedBayName: 'Пост №2 (Электрика/EV)',
+    master: mockWorkerUser,
+    parkingSpot: {
+        row: 2,
+        col: 4,
+        sectorName: 'Сектор А',
+    },
+    pendingIssue: {
+        id: 'issue-99',
+        title: 'Износ передних тормозных колодок',
+        description: 'Остаток фрикционного слоя 2 мм (минимум 3 мм). Рекомендуем заменить во избежание повреждения дисков.',
+        estimatedCost: 1450,
+        status: 'PENDING_APPROVAL',
+    },
+    chatHistory: [
         {
-            id: 'car-01',
-            brand: 'Tesla',
-            model: 'Model Y Dual Motor',
-            manufactureYear: 2023,
-            licensePlate: 'C AB 123',
-            vinNumber: '5YJYGDEF8PF123456',
-            color: 'Pearl White',
-            mileage: 45000,
-            engineSpecs: {
-                drivetrain: 'EV',
-                batteryCapacityKwh: 75,
-                driveType: 'AWD',
-                coolantType: ['G48 EV Antifreeze', 'Coolant Type 2'],
-            },
+            id: 'c1',
+            senderRole: 'worker',
+            senderName: 'Иван Сергеев',
+            text: 'Добрый день! Приступил к диагностике вашей Tesla Model Y.',
+            timestamp: '10:15',
         },
         {
-            id: 'car-02',
-            brand: 'Audi',
-            model: 'A6 Allroad',
-            manufactureYear: 2020,
-            licensePlate: 'C C 777',
-            vinNumber: 'WAUZZZ4G8LN654321',
-            color: 'Mythos Black',
-            mileage: 112000,
-            engineSpecs: {
-                drivetrain: 'ICE',
-                fuelType: 'DIESEL',
-                volumeLiters: 3.0,
-                oilCapacityLiters: 6.4,
-                recommendedOilGrade: ['5W-30 VW 507 00', '5W-30 VW 504 00'],
-            },
+            id: 'c2',
+            senderRole: 'client',
+            senderName: 'Андрей',
+            text: 'Здравствуйте! Обратите внимание на легкий скрип спереди при торможении.',
+            timestamp: '10:18',
+        },
+        {
+            id: 'c3',
+            senderRole: 'worker',
+            senderName: 'Иван Сергеев',
+            text: 'Принято. Обнаружил износ передних колодок, отправил вам карточку согласования.',
+            timestamp: '10:22',
         },
     ],
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
+// --- КАТАЛОГ ЗАПЧАСТЕЙ ---
+export const mockPartsCatalog: AutoPart[] = [
+    {
+        id: 'p-01',
+        name: 'Liqui Moly Top Tec 4200 5W-30',
+        category: 'OIL',
+        compatibleCarModels: ['Audi A6', 'Volkswagen Touareg'],
+        price: 1250,
+        inStock: true,
+        specs: 'VW 504 00 / 507 00 (5 литров)',
+        image: 'https://images.unsplash.com/photo-1615900119311-e6b948796851?auto=format&fit=crop&w=300&q=80',
+    },
+    {
+        id: 'p-02',
+        name: 'HEPA Салонный фильтр Tesla (Комплект 2 шт)',
+        category: 'FILTERS',
+        compatibleCarModels: ['Tesla Model Y', 'Tesla Model 3'],
+        price: 850,
+        inStock: true,
+        specs: 'Защита от пыли PM2.5 и аллергенов',
+        image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=300&q=80',
+    },
+    {
+        id: 'p-03',
+        name: 'Передние тормозные колодки Brembo EV',
+        category: 'BRAKES',
+        compatibleCarModels: ['Tesla Model Y'],
+        price: 1850,
+        inStock: true,
+        specs: 'Керамическое покрытие, сниженный шум',
+        image: 'https://images.unsplash.com/photo-1600706432520-22c92e742e97?auto=format&fit=crop&w=300&q=80',
+    },
+    {
+        id: 'p-04',
+        name: 'Тормозная жидкость Bosch DOT 4 HP',
+        category: 'FLUIDS',
+        compatibleCarModels: ['Tesla Model Y', 'Audi A6'],
+        price: 320,
+        inStock: true,
+        specs: 'Низкая вязкость для систем ABS/ESP (1 литр)',
+        image: 'https://images.unsplash.com/photo-1527383418406-f85a3b146499?auto=format&fit=crop&w=300&q=80',
+    },
+];
 
 
 export interface CarSpecidication {

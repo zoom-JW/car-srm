@@ -7,12 +7,7 @@ import { LoginForm } from './components/public/auth/LoginForm';
 import { RegisterForm } from './components/public/auth/RegisterForm';
 
 
-
-// Модальное окно авторизации / регистрации
-
-
-
-
+import { ClientGarageScreen } from './components/client/pages/ClientOB.tsx'
 export default function App() {
 
 
@@ -24,6 +19,7 @@ export default function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
 
+        <Route path="/client-ob" element={<ClientGarageScreen />} />
       </Routes>
     </BrowserRouter>
   );
